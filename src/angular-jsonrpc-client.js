@@ -43,6 +43,7 @@
     return {
       request              : request,
       setHeaders           : setHeaders,
+      changeServerUrl      : changeServerUrl,
       batch                : batch,
       ERROR_TYPE_SERVER    : ERROR_TYPE_SERVER,
       ERROR_TYPE_TRANSPORT : ERROR_TYPE_TRANSPORT,
@@ -74,6 +75,12 @@
       }
 
       return servers[0];
+    }
+
+    function _changeServerUrl(serverName, Url) {
+      var servers = jsonrpcConfig.servers.filter(function(s) { return s.name === serverName; });
+
+      servers[0].url = Url;
     }
 
     function _determineArguments(args) {
@@ -142,6 +149,12 @@
         type   : errorType,
         message: errorMessage,
       };
+    }
+
+    function changeServerUrl(serverName, url) {
+      if (!serverName) serverName = DEFAULT_SERVER_NAME;
+      var server = _findServer(serverName);
+      _changeServerUrl(server.name, url);
     }
 
     function setHeaders(serverName, headers) {
